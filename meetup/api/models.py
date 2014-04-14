@@ -1,4 +1,6 @@
 from django.db import models
+from markdown.extensions.headerid import unique
+
 
 class Account(models.Model):
     user_id = models.AutoField(primary_key =True)
@@ -18,12 +20,14 @@ class Account(models.Model):
 
 
 class Location(models.Model):
-    user_id = models.PositiveIntegerField(db_index=True);
-    latitude = models.FloatField(db_index=True)
-    longitude = models.FloatField(db_index=True)
+    user_id = models.PositiveIntegerField(primary_key =True)
+    latitude = models.DecimalField(db_index=True, max_digits=10, decimal_places=4)
+    longitude = models.DecimalField(db_index=True, max_digits=10, decimal_places=4)
     last_update_time = models.DateTimeField(auto_now=True)
     
 class Match(models.Model):
     user_id = models.PositiveIntegerField(db_index=True)
     match_user_id = models.PositiveIntegerField(db_index=True)
     islike = models.BooleanField(default = False)
+    class Meta:
+        unique_together = ('user_id', 'match_user_id',)
